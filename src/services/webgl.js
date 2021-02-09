@@ -45,8 +45,8 @@ export const initializeGL = () => {
       offset
     );
 
-    var primitiveType = gl.TRIANGLES;
-    var count = 3;
+    var primitiveType = gl.POINTS;
+    var count = 1;
     const color = getRandomColor();
     gl.clearColor(color[0], color[1], color[2], 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -55,17 +55,6 @@ export const initializeGL = () => {
   }
 };
 
-export const drawAnimations = (gl) => {
-  debugger;
-  var primitiveType = gl.TRIANGLES;
-  var count = 3;
-  const color = getRandomColor();
-  gl.clearColor(color[0], color[1], color[2], 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
-  gl.drawArrays(primitiveType, 0, count);
-};
-// Random color helper function.
 const getRandomColor = () => {
   return [Math.random(), Math.random(), Math.random()];
 };
