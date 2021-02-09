@@ -3,12 +3,14 @@ import React from "react";
 import { initializeGL } from "./services/webgl";
 import FPSStats from "react-fps-stats";
 
+var timer;
 class App extends React.Component {
   componentDidMount() {
     initializeGL();
-    setInterval(initializeGL, 13);
-    // startAnimating(5);
   }
+
+  startAcquisition = () => (timer = setInterval(initializeGL, 13));
+  stopAcquisition = () => clearInterval(timer);
 
   render() {
     return (
@@ -16,17 +18,12 @@ class App extends React.Component {
         <header className="App-header">
           <canvas id="canvas" width="400" height="300" />
           <FPSStats />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <button type="button" onClick={this.startAcquisition}>
+            Start
+          </button>
+          <button type="button" onClick={this.stopAcquisition}>
+            Stop
+          </button>
         </header>
       </div>
     );
