@@ -1,7 +1,6 @@
 import "./App.css";
 import React from "react";
-import { initializeGL, drawAnimations } from "./services/webgl";
-import { startAnimating } from "./services/animate";
+import { initializeGL } from "./services/webgl";
 import FPSStats from "react-fps-stats";
 
 class App extends React.Component {
