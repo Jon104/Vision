@@ -15,8 +15,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <canvas id="canvas" width="400" height="300" />
+        <header id="views">
+          <canvas id="canvas1" width="400" height="400" />
+          <canvas id="canvas2" width="400" height="400" />
+          <canvas id="canvas3" width="400" height="400" />
+          <canvas id="canvas4" width="400" height="400" />
           <FPSStats />
           <button type="button" onClick={this.startAcquisition}>
             Start
