@@ -1,33 +1,35 @@
 import "./App.css";
 import React from "react";
-import { initializeGL } from "./services/webgl";
+import { initializeCanvas, execute } from "./services/webgl";
 import FPSStats from "react-fps-stats";
 
 var timer;
+const canvas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 class App extends React.Component {
-  componentDidMount() {
-    initializeGL();
-  }
-
-  startAcquisition = () => (timer = setInterval(initializeGL, 20));
+  initializeViews = () => initializeCanvas(canvas);
+  startAcquisition = () => (timer = setInterval(execute, 20));
   stopAcquisition = () => clearInterval(timer);
 
   render() {
     return (
-      <div className="App">
-        <header id="views">
-          <canvas id="canvas1" width="400" height="400" />
-          <canvas id="canvas2" width="400" height="400" />
-          <canvas id="canvas3" width="400" height="400" />
-          <canvas id="canvas4" width="400" height="400" />
+      <div>
+        <header>
+          <div id="action-buttons">
+            <button type="button" onClick={this.startAcquisition}>
+              Start
+            </button>
+            <button type="button" onClick={this.stopAcquisition}>
+              Stop
+            </button>
+            <button type="button" onClick={this.initializeViews}>
+              Initialize
+            </button>
+          </div>
           <FPSStats />
-          <button type="button" onClick={this.startAcquisition}>
-            Start
-          </button>
-          <button type="button" onClick={this.stopAcquisition}>
-            Stop
-          </button>
         </header>
+        {canvas.map((id) => (
+          <canvas key={id} id={id} width="300" height="400" />
+        ))}
       </div>
     );
   }

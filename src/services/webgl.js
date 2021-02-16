@@ -1,72 +1,82 @@
-export const initializeGL = () => {
-  const canvas1 = document.querySelector("#canvas1");
-  const canvas2 = document.querySelector("#canvas2");
-  const canvas3 = document.querySelector("#canvas3");
-  const canvas4 = document.querySelector("#canvas4");
+const contexts = [];
 
-  const gl1 =
-    canvas1.getContext("webgl") || canvas1.getContext("experimental-webgl");
-  const gl2 =
-    canvas2.getContext("webgl") || canvas2.getContext("experimental-webgl");
-  const gl3 =
-    canvas3.getContext("webgl") || canvas3.getContext("experimental-webgl");
-  const gl4 =
-    canvas4.getContext("webgl") || canvas4.getContext("experimental-webgl");
-
-  if (gl1 && gl2 && gl3 && gl4) {
-    execute(gl1);
-    execute(gl2);
-    execute(gl3);
-    execute(gl4);
-  }
+export const initializeCanvas = (canvas) => {
+  canvas.forEach((id) => {
+    const canvas = document.getElementById(`${id}`);
+    const gl =
+      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    contexts.push(gl);
+    if (gl) execute(gl);
+  });
 };
 
-const execute = (gl) => {
+export const execute = () => {
   const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
   const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
     .text;
-  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-  const fragmentShader = createShader(
-    gl,
-    gl.FRAGMENT_SHADER,
-    fragmentShaderSource
-  );
-  const program = createProgram(gl, vertexShader, fragmentShader);
-  const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
-  const positionBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  // three 2d points
-  var positions = [0, 0, 0, 0.5, 0.7, 0];
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  contexts.forEach((gl) => {
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+    const fragmentShader = createShader(
+      gl,
+      gl.FRAGMENT_SHADER,
+      fragmentShaderSource
+    );
+    const program = createProgram(gl, vertexShader, fragmentShader);
 
-  gl.useProgram(program);
+    const positionAttributeLocation = gl.getAttribLocation(
+      program,
+      "a_position"
+    );
+    const resolutionUniformLocation = gl.getUniformLocation(
+      program,
+      "u_resolution"
+    );
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    // three 2d points
+    var positions = [
+      Math.random(),
+      Math.random(),
+      Math.random(),
+      Math.random(),
+      Math.random(),
+      Math.random(),
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  gl.enableVertexAttribArray(positionAttributeLocation);
-  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-  var size = 2; // 2 components per iteration
-  var type = gl.FLOAT; // the data is 32bit floats
-  var normalize = false; // don't normalize the data
-  var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-  var offset = 0; // start at the beginning of the buffer
-  gl.vertexAttribPointer(
-    positionAttributeLocation,
-    size,
-    type,
-    normalize,
-    stride,
-    offset
-  );
+    gl.useProgram(program);
 
-  var primitiveType = gl.POINTS;
-  var count = 1;
-  const color = getRandomColor();
-  gl.clearColor(color[0], color[1], color[2], 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.enableVertexAttribArray(positionAttributeLocation);
 
-  gl.drawArrays(primitiveType, 0, count);
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    var size = 2; // 2 components per iteration
+    var type = gl.FLOAT; // the data is 32bit floats
+    var normalize = false; // don't normalize the data
+    var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+    var offset = 0; // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+      positionAttributeLocation,
+      size,
+      type,
+      normalize,
+      stride,
+      offset
+    );
+
+    gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+
+    var primitiveType = gl.TRIANGLES;
+    var count = 3;
+    const color = getRandomColor();
+    gl.clearColor(color[0], color[1], color[2], color[3]);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.drawArrays(primitiveType, 0, count);
+  });
 };
 
 const getRandomColor = () => {
