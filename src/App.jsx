@@ -9,7 +9,7 @@ class App extends React.Component {
     initializeGL();
   }
 
-  startAcquisition = () => (timer = setInterval(initializeGL, 13));
+  startAcquisition = () => (timer = setInterval(initializeGL, 20));
   stopAcquisition = () => clearInterval(timer);
 
   render() {
