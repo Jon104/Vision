@@ -1,4 +1,5 @@
 const contexts = [];
+const amountOfPoints = 5000;
 
 export const initializeCanvas = (canvas) => {
   canvas.forEach((id) => {
@@ -34,15 +35,10 @@ export const execute = () => {
     );
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    // three 2d points
-    var positions = [
-      Math.random(),
-      Math.random(),
-      Math.random(),
-      Math.random(),
-      Math.random(),
-      Math.random(),
-    ];
+    let positions = Array.from(
+      { length: amountOfPoints },
+      () => Math.random() * (1 - -1) + -1
+    );
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -69,18 +65,12 @@ export const execute = () => {
 
     gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
-    var primitiveType = gl.TRIANGLES;
-    var count = 3;
-    const color = getRandomColor();
-    gl.clearColor(color[0], color[1], color[2], color[3]);
+    var count = amountOfPoints;
+    gl.clearColor(0, 0, 0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    gl.drawArrays(primitiveType, 0, count);
+    gl.drawArrays(gl.POINTS, 0, count);
   });
-};
-
-const getRandomColor = () => {
-  return [Math.random(), Math.random(), Math.random()];
 };
 
 const createProgram = (gl, vertexShader, fragmentShader) => {
