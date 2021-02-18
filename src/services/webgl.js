@@ -1,5 +1,5 @@
 const contexts = [];
-const amountOfPoints = 5000;
+const amountOfPoints = 3500;
 
 export const initializeCanvas = (canvas) => {
   canvas.forEach((id) => {
