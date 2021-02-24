@@ -26,7 +26,7 @@ class App extends React.Component {
           </div>
           <FPSStats />
         </header>
-        <canvas id="canvas" width="1500" height="850" />
+        <canvas id="views" />
       </div>
     );
   }

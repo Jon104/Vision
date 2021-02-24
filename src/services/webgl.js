@@ -2,7 +2,10 @@ let gl;
 const amountOfPoints = 120000;
 
 export const initializeCanvas = () => {
-  const canvas = document.getElementById("canvas");
+  const canvas = document.getElementById("views");
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
   gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
   if (gl) execute();
 };
