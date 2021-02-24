@@ -4,9 +4,8 @@ import { initializeCanvas, execute } from "./services/webgl";
 import FPSStats from "react-fps-stats";
 
 var timer;
-const canvas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 class App extends React.Component {
-  initializeViews = () => initializeCanvas(canvas);
+  initializeViews = () => initializeCanvas();
   startAcquisition = () => (timer = setInterval(execute, 20));
   stopAcquisition = () => clearInterval(timer);
 
@@ -27,9 +26,7 @@ class App extends React.Component {
           </div>
           <FPSStats />
         </header>
-        {canvas.map((id) => (
-          <canvas key={id} id={id} width="300" height="400" />
-        ))}
+        <canvas id="canvas" width="1500" height="850" />
       </div>
     );
   }
