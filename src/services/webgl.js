@@ -1,5 +1,7 @@
+import { getRandomNumber } from "./numbers";
+
 let gl;
-const amountOfPoints = 120000;
+const amountOfPoints = 5000;
 
 export const initializeCanvas = () => {
   const canvas = document.getElementById("views");
@@ -30,10 +32,66 @@ export const execute = () => {
   );
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  let positions = Array.from(
-    { length: amountOfPoints },
-    () => Math.random() * (1 - -1) + -1
-  );
+
+  let positions = [
+    -0.99,
+    0,
+    -0.98,
+    getRandomNumber(),
+    -0.97,
+    getRandomNumber(),
+    -0.96,
+    getRandomNumber(),
+    -0.95,
+    getRandomNumber(),
+    -0.94,
+    getRandomNumber(),
+    -0.93,
+    getRandomNumber(),
+    -0.92,
+    getRandomNumber(),
+    -0.91,
+    getRandomNumber(),
+    -0.89,
+    getRandomNumber(),
+    -0.88,
+    getRandomNumber(),
+    -0.87,
+    getRandomNumber(),
+    -0.86,
+    getRandomNumber(),
+    -0.85,
+    getRandomNumber(),
+    -0.84,
+    getRandomNumber(),
+    -0.83,
+    getRandomNumber(),
+    -0.82,
+    getRandomNumber(),
+    -0.81,
+    getRandomNumber(),
+    -0.7,
+    getRandomNumber(),
+    -0.6,
+    0,
+    -0.5,
+    getRandomNumber(),
+    -0.4,
+    0,
+    -0.34,
+    0,
+    -0.3,
+    getRandomNumber(),
+    0,
+    0,
+    0.3,
+    getRandomNumber(),
+    0.4,
+    getRandomNumber(),
+    1,
+    getRandomNumber(),
+  ]; // getRandomPositions(amountOfPoints);
+
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -64,7 +122,7 @@ export const execute = () => {
   gl.clearColor(0, 0, 0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  gl.drawArrays(gl.POINTS, 0, count);
+  gl.drawArrays(gl.LINE_STRIP, 0, count);
 };
 
 const createProgram = (gl, vertexShader, fragmentShader) => {
