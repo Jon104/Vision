@@ -5,8 +5,7 @@ const amountOfPoints = 5000;
 
 export const initializeCanvas = () => {
   const canvas = document.getElementById("views");
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
+  // makeCanvasFullscreen(canvas);
 
   gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
   if (gl) execute();
@@ -408,4 +407,9 @@ const createShader = (gl, type, source) => {
 
   console.log(gl.getShaderInfoLog(shader));
   gl.deleteShader(shader);
+};
+
+const makeCanvasFullscreen = (canvas) => {
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
 };
