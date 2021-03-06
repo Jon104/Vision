@@ -1,17 +1,8 @@
 import { getRandomNumber } from "./numbers";
 
-let gl;
 const amountOfPoints = 5000;
 
-export const initializeCanvas = () => {
-  const canvas = document.getElementById("views");
-  // makeCanvasFullscreen(canvas);
-
-  gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-  if (gl) execute();
-};
-
-export const execute = () => {
+export const execute = (gl) => {
   const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
   const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
     .text;

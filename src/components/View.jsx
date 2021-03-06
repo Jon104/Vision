@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { execute } from "../services/webgl";
 
-const View = () => {
+const View = ({ id, width, height }) => {
+  debugger;
+  let timer = 0;
+  let gl = undefined;
+  useEffect(() => {
+    const canvas = document.getElementById(id);
+    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+  });
+
+  const startAcquisition = () => (timer = setInterval(execute(gl), 20));
+  const stopAcquisition = () => clearInterval(timer);
   const rulersBreakpoints = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  const width = 800;
-  const height = 200;
+
   const setTransformHeight = (value) => {
     const position = height - value * 2;
     return `translate(0, ${position})`;
@@ -18,7 +28,7 @@ const View = () => {
       <div className="columns no-gutters">
         <div className="column no-gutters h200">
           <canvas
-            id="views"
+            id={id}
             width={width.toString().concat("px")}
             height={height}
           />

@@ -1,14 +1,45 @@
 import "./App.css";
-import React from "react";
-import { initializeCanvas, execute } from "./services/webgl";
+import React, { useRef } from "react";
 import View from "./components/View";
 import FPSStats from "react-fps-stats";
 
-var timer;
+const ViewTest = React.forwardRef((props, ref) => (
+  <View ref={ref} {...props} />
+));
+
 const App = () => {
-  const onInitializeViews = () => initializeCanvas();
-  const onStartAcquisition = () => (timer = setInterval(execute, 20));
-  const onStopAcquisition = () => clearInterval(timer);
+  const views = [
+    { id: "canvas1", width: 800, height: 200 },
+    { id: "canvas2", width: 800, height: 200 },
+  ];
+
+  const viewsRefs = useRef([]);
+  const setRefs = (ref) => {
+    debugger;
+    viewsRefs.current.push(ref);
+  };
+  const onStartAcquisition = (id) => {
+    debugger;
+    viewsRefs.forEach((view) => view.startAcquisition());
+  };
+  const onStopAcquisition = (id) => viewsRefs[id].stopAcquisition();
+
+  const createElements = () => {
+    let elements = [];
+    views.forEach((view) => {
+      elements.push(
+        <ViewTest
+          key={view.id}
+          id={view.id}
+          width={view.width}
+          height={view.height}
+          ref={setRefs}
+        />
+      );
+    });
+
+    return elements;
+  };
 
   return (
     <div>
@@ -20,13 +51,10 @@ const App = () => {
           <button type="button" onClick={onStopAcquisition}>
             Stop
           </button>
-          <button type="button" onClick={onInitializeViews}>
-            Initialize
-          </button>
         </div>
         <FPSStats />
       </header>
-      <View />
+      {createElements()}
     </div>
   );
 };
