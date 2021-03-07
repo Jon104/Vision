@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { execute } from "../services/webgl";
 
 const View = ({ id, width, height }) => {
-  debugger;
   let timer = 0;
   let gl = undefined;
   useEffect(() => {

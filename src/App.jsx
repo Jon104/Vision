@@ -1,45 +1,23 @@
 import "./App.css";
-import React, { useRef } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import View from "./components/View";
 import FPSStats from "react-fps-stats";
+import { startAcquisition, stopAcquisition } from "./actions";
 
 const ViewTest = React.forwardRef((props, ref) => (
   <View ref={ref} {...props} />
 ));
 
-const App = () => {
+const App = (props) => {
+  const { startAcquisition, stopAcquisition } = props;
   const views = [
     { id: "canvas1", width: 800, height: 200 },
     { id: "canvas2", width: 800, height: 200 },
   ];
 
-  const viewsRefs = useRef([]);
-  const setRefs = (ref) => {
-    debugger;
-    viewsRefs.current.push(ref);
-  };
-  const onStartAcquisition = (id) => {
-    debugger;
-    viewsRefs.forEach((view) => view.startAcquisition());
-  };
-  const onStopAcquisition = (id) => viewsRefs[id].stopAcquisition();
-
-  const createElements = () => {
-    let elements = [];
-    views.forEach((view) => {
-      elements.push(
-        <ViewTest
-          key={view.id}
-          id={view.id}
-          width={view.width}
-          height={view.height}
-          ref={setRefs}
-        />
-      );
-    });
-
-    return elements;
-  };
+  const onStartAcquisition = () => startAcquisition();
+  const onStopAcquisition = () => stopAcquisition();
 
   return (
     <div>
@@ -54,9 +32,23 @@ const App = () => {
         </div>
         <FPSStats />
       </header>
-      {createElements()}
+      {views.map((view) => (
+        <ViewTest
+          key={view.id}
+          id={view.id}
+          width={view.width}
+          height={view.height}
+        />
+      ))}
     </div>
   );
 };
 
-export default App;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+export default connect(mapStateToProps, {
+  startAcquisition,
+  stopAcquisition,
+})(App);
