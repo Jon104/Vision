@@ -1,6 +1,43 @@
-export const startAcquisition = () => async (dispatch) => {
+import { createProgram, createShader, execute } from "../services/webgl";
+
+export const createGL = (id) => (dispatch) => {
   try {
+    const canvas = document.getElementById(id);
+    const gl =
+      canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+    const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+    const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
+      .text;
+
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+    const fragmentShader = createShader(
+      gl,
+      gl.FRAGMENT_SHADER,
+      fragmentShaderSource
+    );
+    const program = createProgram(gl, vertexShader, fragmentShader);
+
+    const view = {
+      gl,
+      program,
+    };
+
+    dispatch({ type: "ADD_VIEW", view });
+  } catch (error) {
+    console.error("Start Acquisition");
+  }
+};
+
+export const startAcquisition = () => (dispatch, getState) => {
+  try {
+    debugger;
+    let timer;
+    getState().App.views.forEach(
+      (view) => (timer = setInterval(execute(view), 20))
+    );
     dispatch({ type: "START_ACQUISITION" });
+    dispatch({ type: "ADD_TIMER", timer });
   } catch (error) {
     console.error("Start Acquisition");
   }

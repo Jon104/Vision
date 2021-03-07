@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
-import { execute } from "../services/webgl";
+import { connect } from "react-redux";
+import { createGL } from "../actions";
 
-const View = ({ id, width, height }) => {
-  let timer = 0;
-  let gl = undefined;
-  useEffect(() => {
-    const canvas = document.getElementById(id);
-    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-  });
+const View = (props) => {
+  const { createGL, id, width, height } = props;
+  useEffect(() => createGL(id));
 
-  const startAcquisition = () => (timer = setInterval(execute(gl), 20));
-  const stopAcquisition = () => clearInterval(timer);
+  // const startAcquisition = () => (timer = setInterval(execute(gl), 20));
+  // const stopAcquisition = () => clearInterval(timer);
   const rulersBreakpoints = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   const setTransformHeight = (value) => {
@@ -70,4 +67,10 @@ const View = ({ id, width, height }) => {
   );
 };
 
-export default View;
+const mapStateToProps = (state) => {
+  return {};
+};
+
+export default connect(mapStateToProps, {
+  createGL,
+})(View);

@@ -1,20 +1,33 @@
 import { getRandomNumber } from "./numbers";
 
-const amountOfPoints = 5000;
+export const createProgram = (gl, vertexShader, fragmentShader) => {
+  var program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  var success = gl.getProgramParameter(program, gl.LINK_STATUS);
+  if (success) {
+    return program;
+  }
 
-export const execute = (gl) => {
-  const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
-  const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
-    .text;
+  console.log(gl.getProgramInfoLog(program));
+  gl.deleteProgram(program);
+};
 
-  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-  const fragmentShader = createShader(
-    gl,
-    gl.FRAGMENT_SHADER,
-    fragmentShaderSource
-  );
-  const program = createProgram(gl, vertexShader, fragmentShader);
+export const createShader = (gl, type, source) => {
+  const shader = gl.createShader(type);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+  if (success) {
+    return shader;
+  }
 
+  console.log(gl.getShaderInfoLog(shader));
+  gl.deleteShader(shader);
+};
+
+export const execute = ({ gl, program }) => {
   const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
   const resolutionUniformLocation = gl.getUniformLocation(
     program,
@@ -366,38 +379,10 @@ export const execute = (gl) => {
 
   gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
 
-  var count = amountOfPoints;
   gl.clearColor(0, 0, 0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
-  gl.drawArrays(gl.LINE_STRIP, 0, count);
-};
-
-const createProgram = (gl, vertexShader, fragmentShader) => {
-  var program = gl.createProgram();
-  gl.attachShader(program, vertexShader);
-  gl.attachShader(program, fragmentShader);
-  gl.linkProgram(program);
-  var success = gl.getProgramParameter(program, gl.LINK_STATUS);
-  if (success) {
-    return program;
-  }
-
-  console.log(gl.getProgramInfoLog(program));
-  gl.deleteProgram(program);
-};
-
-const createShader = (gl, type, source) => {
-  const shader = gl.createShader(type);
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-  if (success) {
-    return shader;
-  }
-
-  console.log(gl.getShaderInfoLog(shader));
-  gl.deleteShader(shader);
+  gl.drawArrays(gl.LINE_STRIP, 0, positions.length / 2);
 };
 
 const makeCanvasFullscreen = (canvas) => {
