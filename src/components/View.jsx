@@ -1,28 +1,52 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { createGL } from "../actions";
+import { initializeCanvas } from "../services/webgl";
 
 const View = (props) => {
-  const { createGL, id, width, height } = props;
-  useEffect(() => createGL(id));
+  const { id, width, height } = props;
+  useEffect(() => initializeCanvas(id));
 
-  // const startAcquisition = () => (timer = setInterval(execute(gl), 20));
-  // const stopAcquisition = () => clearInterval(timer);
-  const rulersBreakpoints = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  const amplitudeRulerBreakpoints = [
+    -100,
+    -80,
+    -60,
+    -40,
+    -20,
+    0,
+    20,
+    40,
+    60,
+    80,
+    100,
+  ];
 
-  const setTransformHeight = (value) => {
-    const position = height - value * 2;
+  const ultrasoundRulerBreakpoints = [
+    0,
+    50,
+    100,
+    150,
+    200,
+    250,
+    300,
+    350,
+    400,
+    450,
+    500,
+  ];
+
+  const setTransformHeight = (index) => {
+    const position = height - index * 20;
     return `translate(0, ${position})`;
   };
   const setTransformWidth = (value) => {
-    const position = width - value * 8;
+    const position = width - value * 80;
     return `translate(${position}, 10)`;
   };
 
   return (
     <>
       <div className="columns no-gutters">
-        <div className="column no-gutters h200">
+        <div className="column no-gutters h200 mw800">
           <canvas
             id={id}
             width={width.toString().concat("px")}
@@ -30,14 +54,14 @@ const View = (props) => {
           />
         </div>
         <svg className="column no-gutters">
-          <line stroke="blue" x1="0" y1={height} x2="0" y2="0" />
-          {rulersBreakpoints.map((value, index) => (
-            <g key={index} transform={setTransformHeight(value)}>
-              <path stroke="blue" d="M0,0L6,0"></path>
+          <line stroke="yellow" x1="0" y1={height} x2="0" y2="0" />
+          {amplitudeRulerBreakpoints.map((value, index) => (
+            <g key={index} transform={setTransformHeight(index)}>
+              <path stroke="yellow" d="M0,0L6,0"></path>
               <text
                 className="is-size-7"
                 transform="translate(9, 0)"
-                fill="blue"
+                fill="yellow"
                 visibility="false"
                 dy="0.32em"
               >
@@ -48,13 +72,13 @@ const View = (props) => {
         </svg>
       </div>
       <svg className="column no-gutters" width={width} height="100px">
-        <line stroke="blue" x1="0" y1="0" x2={width} y2="0" />
-        {rulersBreakpoints.map((value, index) => (
-          <g key={index} transform={setTransformWidth(value)}>
+        <line stroke="purple" x1="0" y1="0" x2={width} y2="0" />
+        {ultrasoundRulerBreakpoints.map((value, index) => (
+          <g key={index} transform={setTransformWidth(index)}>
             <text
               className="is-size-7"
               transform="translate(9, 0)"
-              fill="blue"
+              fill="purple"
               visibility="false"
               dy="0.32em"
             >
@@ -71,6 +95,4 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-export default connect(mapStateToProps, {
-  createGL,
-})(View);
+export default connect(mapStateToProps, {})(View);

@@ -24,6 +24,10 @@ body {
   height: 200px;
 }
 
+.mw800 {
+  max-width: 800px;
+}
+
 .no-gutters {
   padding: 0;
   margin-bottom: 0px !important;
