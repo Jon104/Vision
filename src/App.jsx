@@ -4,20 +4,18 @@ import { connect } from "react-redux";
 import View from "./components/View";
 import FPSStats from "react-fps-stats";
 import { startAcquisition, stopAcquisition } from "./actions";
+import { execute } from "./services/webgl";
 
-const ViewTest = React.forwardRef((props, ref) => (
-  <View ref={ref} {...props} />
-));
+var timer;
 
 const App = (props) => {
-  const { startAcquisition, stopAcquisition } = props;
-  const views = [
+  const initialViews = [
     { id: "canvas1", width: 800, height: 200 },
     { id: "canvas2", width: 800, height: 200 },
   ];
 
-  const onStartAcquisition = () => startAcquisition();
-  const onStopAcquisition = () => stopAcquisition();
+  const onStartAcquisition = () => (timer = setInterval(execute, 13));
+  const onStopAcquisition = () => clearInterval(timer);
 
   return (
     <div>
@@ -32,8 +30,8 @@ const App = (props) => {
         </div>
         <FPSStats />
       </header>
-      {views.map((view) => (
-        <ViewTest
+      {initialViews.map((view) => (
+        <View
           key={view.id}
           id={view.id}
           width={view.width}
@@ -45,7 +43,10 @@ const App = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  const { views } = state.App;
+  return {
+    views,
+  };
 };
 
 export default connect(mapStateToProps, {

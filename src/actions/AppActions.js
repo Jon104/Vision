@@ -1,4 +1,4 @@
-import { createProgram, createShader, execute } from "../services/webgl";
+import { createProgram, createShader } from "../services/webgl";
 
 export const createGL = (id) => (dispatch) => {
   try {
@@ -31,13 +31,7 @@ export const createGL = (id) => (dispatch) => {
 
 export const startAcquisition = () => (dispatch, getState) => {
   try {
-    debugger;
-    let timer;
-    getState().App.views.forEach(
-      (view) => (timer = setInterval(execute(view), 20))
-    );
     dispatch({ type: "START_ACQUISITION" });
-    dispatch({ type: "ADD_TIMER", timer });
   } catch (error) {
     console.error("Start Acquisition");
   }

@@ -19,4 +19,7 @@ const AppReducer = (state = initialState, action) => {
   }
 };
 
+export const getIsAcquisitionStarted = (state) => state.isAcquisitionStarted;
+export const getViews = (state) => state.views;
+
 export default AppReducer;
