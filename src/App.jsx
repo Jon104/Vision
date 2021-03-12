@@ -35,7 +35,7 @@ const App = (props) => {
   const onParticlesClick = () => setIsParticlesEnabled(!isParticlesEnabled);
 
   return (
-    <div>
+    <div class="container">
       <header>
         <div id="action-buttons">
           <button type="button" onClick={onStartAcquisition}>
@@ -61,7 +61,7 @@ const App = (props) => {
               bottom: 0,
             }}
           >
-            <svg className="absolute" height={view.height} width="1">
+            <svg className="absolute pointer" height={view.height} width="10">
               <line
                 x1="0"
                 y1={view.height}
@@ -81,7 +81,7 @@ const App = (props) => {
               bottom: view.height,
             }}
           >
-            <svg className="absolute" height="1" width={view.width}>
+            <svg className="absolute pointer" height="1" width={view.width}>
               <line
                 x1={view.width}
                 y1="0"
