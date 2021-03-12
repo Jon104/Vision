@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import View from "./components/View";
 import FPSStats from "react-fps-stats";
@@ -8,6 +8,8 @@ import { execute } from "./services/webgl";
 import ParticleField from "react-particles-webgl";
 import Draggable from "react-draggable";
 import { getColor } from "./services/utils";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 var timer;
 
@@ -30,9 +32,43 @@ const App = (props) => {
   ];
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
-  const onStartAcquisition = () => (timer = setInterval(execute, 13));
+  const onStartAcquisition = () => (timer = requestAnimationFrame(execute));
   const onStopAcquisition = () => clearInterval(timer);
   const onParticlesClick = () => setIsParticlesEnabled(!isParticlesEnabled);
+
+  useEffect(() => init());
+
+  let camera, scene, renderer;
+  let geometry, material, mesh;
+
+  const init = () => {
+    camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.position.z = 1;
+
+    scene = new THREE.Scene();
+
+    geometry = new THREE.BoxGeometry(0.7, 0.7, 0.7);
+    material = new THREE.MeshNormalMaterial({ color: 0x00ff00 });
+
+    mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(400, 400);
+    renderer.setAnimationLoop(animation);
+    document.body.appendChild(renderer.domElement);
+  };
+
+  const animation = (time) => {
+    mesh.rotation.y = time / 7000;
+
+    renderer.render(scene, camera);
+  };
 
   return (
     <div class="container">
