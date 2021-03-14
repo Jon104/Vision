@@ -22,13 +22,13 @@ const App = (props) => {
       width: 800,
       height: 200,
     },
-    {
-      id: "canvas2",
-      type: "sectorial",
-      rulers: { vertical: "ultrasound", horizontal: "amp" },
-      width: 800,
-      height: 200,
-    },
+    // {
+    //   id: "canvas2",
+    //   type: "sectorial",
+    //   rulers: { vertical: "ultrasound", horizontal: "amp" },
+    //   width: 800,
+    //   height: 200,
+    // },
   ];
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
@@ -52,7 +52,7 @@ const App = (props) => {
 
     scene = new THREE.Scene();
 
-    geometry = new THREE.BoxGeometry(0.7, 0.7, 0.7);
+    geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
     material = new THREE.MeshNormalMaterial({ color: 0x00ff00 });
 
     mesh = new THREE.Mesh(geometry, material);
