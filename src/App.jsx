@@ -32,7 +32,7 @@ const App = (props) => {
   ];
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
-  const onStartAcquisition = () => (timer = requestAnimationFrame(execute));
+  const onStartAcquisition = () => (timer = setInterval(execute));
   const onStopAcquisition = () => clearInterval(timer);
   const onParticlesClick = () => setIsParticlesEnabled(!isParticlesEnabled);
 
@@ -61,7 +61,7 @@ const App = (props) => {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(400, 400);
     renderer.setAnimationLoop(animation);
-    document.body.appendChild(renderer.domElement);
+    document.getElementById("3d").appendChild(renderer.domElement);
   };
 
   const animation = (time) => {
@@ -131,6 +131,7 @@ const App = (props) => {
           <View id={view.id} width={view.width} height={view.height} />
         </div>
       ))}
+      <div id="3d" className="center" />
       {isParticlesEnabled && (
         <div className="put-behind fullscreen">
           <ParticleField />

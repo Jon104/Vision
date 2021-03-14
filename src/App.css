@@ -17,6 +17,12 @@ body {
   display: inline-block;
 }
 
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
 .absolute {
   position: absolute;
 }
