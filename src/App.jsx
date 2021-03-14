@@ -32,7 +32,7 @@ const App = (props) => {
   ];
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
-  const onStartAcquisition = () => (timer = setInterval(execute));
+  const onStartAcquisition = () => (timer = setInterval(execute, 20));
   const onStopAcquisition = () => clearInterval(timer);
   const onParticlesClick = () => setIsParticlesEnabled(!isParticlesEnabled);
 

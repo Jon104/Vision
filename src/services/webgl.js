@@ -1,4 +1,4 @@
-import { getRandomNumber } from "./numbers";
+import { fliker } from "./numbers";
 
 const gls = [];
 
@@ -62,8 +62,51 @@ export const execute = () => {
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
+
     let positions = [
+      -0.99,
+      0,
+      -0.98,
+      fliker(),
+      -0.97,
+      0,
+      -0.851,
+      0,
+      -0.85,
+      fliker(),
+      -0.849,
+      0,
+      -0.76,
+      0,
+      -0.75,
+      fliker(),
+      -0.749,
+      0,
+      0.5,
+      0,
+      0.73,
+      0,
+      0.75,
+      fliker(),
+      0.749,
+      0,
+      0.741,
+      0,
+      0.74,
+      fliker(),
+      0.749,
+      0,
+      0.9,
+      0,
+      1.0,
+      0
     ];
+    var index = 0;
+    while (index < 20) {
+      
+      index = index + 1
+    }
+    
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
