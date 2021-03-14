@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { initializeCanvas } from "../services/webgl";
 
 const View = (props) => {
-  const { id, width, height } = props;
-  useEffect(() => initializeCanvas(id));
+  const { id, width, height, type } = props;
+  useEffect(() => initializeCanvas(id, type));
 
   const amplitudeRulerBreakpoints = [
     -100,

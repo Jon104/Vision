@@ -1,6 +1,49 @@
 import { fliker } from "./numbers";
+import { ASCAN } from "./type";
 
 const gls = [];
+
+const floorFlikering = () => [
+  -0.99,
+  0,
+  -0.98,
+  fliker(),
+  -0.97,
+  0,
+  -0.851,
+  0,
+  -0.85,
+  fliker(),
+  -0.849,
+  0,
+  -0.76,
+  0,
+  -0.75,
+  fliker(),
+  -0.749,
+  0,
+  -0.747,0,
+  -0.746,fliker(),
+  -0.745,0,
+  0.5,
+  0,
+  0.73,
+  0,
+  0.75,
+  fliker(),
+  0.749,
+  0,
+  0.741,
+  0,
+  0.74,
+  fliker(),
+  0.749,
+  0,
+  0.9,
+  0,
+  1.0,
+  0,
+];
 
 export const createProgram = (gl, vertexShader, fragmentShader) => {
   var program = gl.createProgram();
@@ -29,117 +72,149 @@ export const createShader = (gl, type, source) => {
   gl.deleteShader(shader);
 };
 
-export const initializeCanvas = (id) => {
+export const initializeCanvas = (id, type) => {
   const canvas = document.getElementById(id);
   // makeCanvasFullscreen(canvas);
 
   const currentContext =
     canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-  gls.push(currentContext);
+  gls.push({type: type, context: currentContext});
 };
 
 export const execute = () => {
-  gls.forEach((gl) => {
-    const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
-    const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
-      .text;
+  gls.forEach(({type, context}) => {
+    if (type === ASCAN) {
+      const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+      const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
+        .text;
 
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-    const fragmentShader = createShader(
-      gl,
-      gl.FRAGMENT_SHADER,
-      fragmentShaderSource
-    );
-    const program = createProgram(gl, vertexShader, fragmentShader);
-    const positionAttributeLocation = gl.getAttribLocation(
-      program,
-      "a_position"
-    );
-    const resolutionUniformLocation = gl.getUniformLocation(
-      program,
-      "u_resolution"
-    );
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      const vertexShader = createShader(context, context.VERTEX_SHADER, vertexShaderSource);
+      const fragmentShader = createShader(
+        context,
+        context.FRAGMENT_SHADER,
+        fragmentShaderSource
+      );
+      const program = createProgram(context, vertexShader, fragmentShader);
+      const positionAttributeLocation = context.getAttribLocation(
+        program,
+        "a_position"
+      );
+      const resolutionUniformLocation = context.getUniformLocation(
+        program,
+        "u_resolution"
+      );
+      const positionBuffer = context.createBuffer();
+      context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
 
+      let basic = floorFlikering();
+      let random = Math.floor(Math.random() * 10);
+      if (random < 9 && random > 7) basic =  basic.concat(middleShockwave())
+      let positions = basic
 
-    let positions = [
-      -0.99,
-      0,
-      -0.98,
-      fliker(),
-      -0.97,
-      0,
-      -0.851,
-      0,
-      -0.85,
-      fliker(),
-      -0.849,
-      0,
-      -0.76,
-      0,
-      -0.75,
-      fliker(),
-      -0.749,
-      0,
-      0.5,
-      0,
-      0.73,
-      0,
-      0.75,
-      fliker(),
-      0.749,
-      0,
-      0.741,
-      0,
-      0.74,
-      fliker(),
-      0.749,
-      0,
-      0.9,
-      0,
-      1.0,
-      0
-    ];
-    var index = 0;
-    while (index < 20) {
+      context.bufferData(context.ARRAY_BUFFER, new Float32Array(positions), context.STATIC_DRAW);
+
+      context.viewport(0, 0, context.canvas.width, context.canvas.height);
+
+      context.useProgram(program);
+
+      context.enableVertexAttribArray(positionAttributeLocation);
+
+      context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
+
+      var size = 2; // 2 components per iteration
+      var type = context.FLOAT; // the data is 32bit floats
+      var normalize = false; // don't normalize the data
+      var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+      var offset = 0; // start at the beginning of the buffer
+      context.vertexAttribPointer(
+        positionAttributeLocation,
+        size,
+        type,
+        normalize,
+        stride,
+        offset
+      );
+
+      context.uniform2f(resolutionUniformLocation, context.canvas.width, context.canvas.height);
+
+      context.clearColor(0, 0, 0, 1.0);
+      context.clear(context.COLOR_BUFFER_BIT);
+
+      context.drawArrays(context.LINE_STRIP, 0, positions.length / 2);
+    } else {
+      const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
+      const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
+        .text;
+
+      const vertexShader = createShader(context, context.VERTEX_SHADER, vertexShaderSource);
+      const fragmentShader = createShader(
+        context,
+        context.FRAGMENT_SHADER,
+        fragmentShaderSource
+      );
+      const program = createProgram(context, vertexShader, fragmentShader);
+      const positionAttributeLocation = context.getAttribLocation(
+        program,
+        "a_position"
+      );
+      const resolutionUniformLocation = context.getUniformLocation(
+        program,
+        "u_resolution"
+      );
+      const positionBuffer = context.createBuffer();
+      context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
+
+      let positions = [-0.06,0,-0.06,0.2,0.06,0,0.06,0.2,-0.06, 0.2, 0.06,0]
       
-      index = index + 1
+      context.bufferData(context.ARRAY_BUFFER, new Float32Array(positions), context.STATIC_DRAW);
+
+      context.viewport(0, 0, context.canvas.width, context.canvas.height);
+
+      context.useProgram(program);
+
+      context.enableVertexAttribArray(positionAttributeLocation);
+
+      context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
+
+      var size = 2; // 2 components per iteration
+      var type = context.FLOAT; // the data is 32bit floats
+      var normalize = false; // don't normalize the data
+      var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+      var offset = 0; // start at the beginning of the buffer
+      context.vertexAttribPointer(
+        positionAttributeLocation,
+        size,
+        type,
+        normalize,
+        stride,
+        offset
+      );
+
+      context.uniform2f(resolutionUniformLocation, context.canvas.width, context.canvas.height);
+
+      context.clearColor(0, 0, 0, 1.0);
+      context.clear(context.COLOR_BUFFER_BIT);
+
+      context.drawArrays(context.TRIANGLES, 0, positions.length / 2);
     }
-    
-
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-    gl.useProgram(program);
-
-    gl.enableVertexAttribArray(positionAttributeLocation);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-    var size = 2; // 2 components per iteration
-    var type = gl.FLOAT; // the data is 32bit floats
-    var normalize = false; // don't normalize the data
-    var stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-    var offset = 0; // start at the beginning of the buffer
-    gl.vertexAttribPointer(
-      positionAttributeLocation,
-      size,
-      type,
-      normalize,
-      stride,
-      offset
-    );
-
-    gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-
-    gl.clearColor(0, 0, 0, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    gl.drawArrays(gl.LINE_STRIP, 0, positions.length / 2);
   });
 };
+
+const middleShockwave = () => [ 
+  -0.06,0,
+  -0.05,0.1,
+  -0.04,-0.1,
+  -0.03,0,
+  -0.02,0.25,
+  -0.01,-0.25,
+  0.0,0.5,
+  0.01,-0.5,
+  0.02,0.25,
+  0.03,-0.25,
+  0.04,0.1,
+  0.05,-0.1,
+  0.06,0
+]
 
 const makeCanvasFullscreen = (canvas) => {
   canvas.height = window.innerHeight;

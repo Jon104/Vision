@@ -22,13 +22,20 @@ const App = (props) => {
       width: 800,
       height: 200,
     },
-    // {
-    //   id: "canvas2",
-    //   type: "sectorial",
-    //   rulers: { vertical: "ultrasound", horizontal: "amp" },
-    //   width: 800,
-    //   height: 200,
-    // },
+    {
+      id: "canvas2",
+      type: "ascan",
+      rulers: { vertical: "amp", horizontal: "ultrasound" },
+      width: 800,
+      height: 200,
+    },
+    {
+      id: "canvas3vie",
+      type: "sectorial",
+      rulers: { vertical: "ultrasound", horizontal: "amp" },
+      width: 800,
+      height: 200,
+    },
   ];
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
@@ -66,7 +73,6 @@ const App = (props) => {
 
   const animation = (time) => {
     mesh.rotation.y = time / 7000;
-
     renderer.render(scene, camera);
   };
 
@@ -128,7 +134,7 @@ const App = (props) => {
               />
             </svg>
           </Draggable>
-          <View id={view.id} width={view.width} height={view.height} />
+          <View id={view.id} width={view.width} height={view.height} type={view.type}/>
         </div>
       ))}
       <div id="3d" className="center" />
