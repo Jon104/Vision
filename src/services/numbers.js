@@ -3,7 +3,7 @@ export const getRandomNumber = () => {
 };
 
 export const fliker = () => {
-  if ((Math.random() % 2) > 0.5) return 0.0259
+  if ((Math.random() % 2) > 0.5) return 0.029
   else return 0
 }
 

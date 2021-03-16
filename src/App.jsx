@@ -25,6 +25,7 @@ const App = (props) => {
     {
       id: "canvas2",
       type: "ascan",
+      subtype: "pos",
       rulers: { vertical: "amp", horizontal: "ultrasound" },
       width: 800,
       height: 200,
@@ -39,11 +40,21 @@ const App = (props) => {
   ];
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
-  const onStartAcquisition = () => (timer = setInterval(execute, 20));
+  const onStartAcquisition = () => (timer = setInterval(execute, 60));
   const onStopAcquisition = () => clearInterval(timer);
   const onParticlesClick = () => setIsParticlesEnabled(!isParticlesEnabled);
 
-  useEffect(() => init());
+  useEffect(() => {
+    init()     
+    const websocket = new WebSocket('ws://localhost:8002')
+    websocket.addEventListener('open', function(event) {
+      console.log('openned')
+    })
+    websocket.addEventListener('message', function(event) {
+      console.log('Message from server ', event.data)
+    })
+    
+  });
 
   let camera, scene, renderer;
   let geometry, material, mesh;
@@ -134,10 +145,10 @@ const App = (props) => {
               />
             </svg>
           </Draggable>
-          <View id={view.id} width={view.width} height={view.height} type={view.type}/>
+          <View id={view.id} width={view.width} height={view.height} type={view.type} subtype={view.subtype}/>
         </div>
       ))}
-      <div id="3d" className="center" />
+      <div id="3d" />
       {isParticlesEnabled && (
         <div className="put-behind fullscreen">
           <ParticleField />

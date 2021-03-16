@@ -72,17 +72,17 @@ export const createShader = (gl, type, source) => {
   gl.deleteShader(shader);
 };
 
-export const initializeCanvas = (id, type) => {
+export const initializeCanvas = (id, type, subtype) => {
   const canvas = document.getElementById(id);
   // makeCanvasFullscreen(canvas);
 
   const currentContext =
     canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-  gls.push({type: type, context: currentContext});
+  gls.push({type: type, subtype: subtype, context: currentContext});
 };
 
 export const execute = () => {
-  gls.forEach(({type, context}) => {
+  gls.forEach(({type, subtype, context}) => {
     if (type === ASCAN) {
       const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
       const fragmentShaderSource = document.querySelector("#fragment-shader-2d")
@@ -107,8 +107,8 @@ export const execute = () => {
       context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
 
       let basic = floorFlikering();
-      let random = Math.floor(Math.random() * 10);
-      if (random < 9 && random > 7) basic =  basic.concat(middleShockwave())
+      basic.splice(24, 0, ...middleShockwave, ...smallShockwave)
+      if (subtype === "pos") basic = basic.map((x, index) => (index % 2 === 0) ?  x : Math.abs(x))
       let positions = basic
 
       context.bufferData(context.ARRAY_BUFFER, new Float32Array(positions), context.STATIC_DRAW);
@@ -200,20 +200,26 @@ export const execute = () => {
   });
 };
 
-const middleShockwave = () => [ 
+const middleShockwave = [ 
   -0.06,0,
-  -0.05,0.1,
-  -0.04,-0.1,
-  -0.03,0,
-  -0.02,0.25,
-  -0.01,-0.25,
-  0.0,0.5,
-  0.01,-0.5,
-  0.02,0.25,
-  0.03,-0.25,
-  0.04,0.1,
-  0.05,-0.1,
-  0.06,0
+  -0.05,0.02,
+  -0.04,-0.13,
+  -0.03,0.27,
+  -0.02,-0.27,
+  -0.01,0.13,
+  0.0,-0.02,
+  0.01,0
+]
+
+const smallShockwave = [
+  0.06,0,
+  0.07,0.05,
+  0.08,-0.2,
+  0.09,0.4,
+  0.1,-0.4,
+  0.11,0.15,
+  0.12,-0.05,
+  0.13,0
 ]
 
 const makeCanvasFullscreen = (canvas) => {
