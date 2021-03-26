@@ -1,49 +1,6 @@
-import { fliker } from "./numbers";
 import { ASCAN } from "./type";
 
 const gls = [];
-
-const floorFlikering = () => [
-  -0.99,
-  0,
-  -0.98,
-  fliker(),
-  -0.97,
-  0,
-  -0.851,
-  0,
-  -0.85,
-  fliker(),
-  -0.849,
-  0,
-  -0.76,
-  0,
-  -0.75,
-  fliker(),
-  -0.749,
-  0,
-  -0.747,0,
-  -0.746,fliker(),
-  -0.745,0,
-  0.5,
-  0,
-  0.73,
-  0,
-  0.75,
-  fliker(),
-  0.749,
-  0,
-  0.741,
-  0,
-  0.74,
-  fliker(),
-  0.749,
-  0,
-  0.9,
-  0,
-  1.0,
-  0,
-];
 
 export const createProgram = (gl, vertexShader, fragmentShader) => {
   var program = gl.createProgram();
@@ -81,7 +38,7 @@ export const initializeCanvas = (id, type, subtype) => {
   gls.push({type: type, subtype: subtype, context: currentContext});
 };
 
-export const execute = () => {
+export const execute = (data) => {
   gls.forEach(({type, subtype, context}) => {
     if (type === ASCAN) {
       const vertexShaderSource = document.querySelector("#vertex-shader-2d").text;
@@ -106,8 +63,7 @@ export const execute = () => {
       const positionBuffer = context.createBuffer();
       context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
 
-      let basic = floorFlikering();
-      basic.splice(24, 0, ...middleShockwave, ...smallShockwave)
+      let basic = data;
       if (subtype === "pos") basic = basic.map((x, index) => (index % 2 === 0) ?  x : Math.abs(x))
       let positions = basic
 

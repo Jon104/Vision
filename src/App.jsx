@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import View from "./components/View";
 import FPSStats from "react-fps-stats";
-import { startAcquisition, stopAcquisition } from "./actions";
+import { connectToCPU, startAcquisition, stopAcquisition } from "./actions";
 import { execute } from "./services/webgl";
 import ParticleField from "react-particles-webgl";
 import Draggable from "react-draggable";
 import { getColor } from "./services/utils";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 var timer;
+var websocket;
 
 const App = (props) => {
   const initialViews = [
@@ -40,20 +40,25 @@ const App = (props) => {
   ];
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
-  const onStartAcquisition = () => (timer = setInterval(execute, 60));
+  const onStartAcquisition = () => websocket.send(JSON.stringify({ method: "START_ACQUISITION" }));
   const onStopAcquisition = () => clearInterval(timer);
   const onParticlesClick = () => setIsParticlesEnabled(!isParticlesEnabled);
 
-  useEffect(() => {
-    init()     
-    const websocket = new WebSocket('ws://localhost:8002')
+  const connectToCPU = () => {
+    websocket = new WebSocket('ws://localhost:8003')
+    websocket.binaryType = "arraybuffer";
     websocket.addEventListener('open', function(event) {
       console.log('openned')
     })
     websocket.addEventListener('message', function(event) {
-      console.log('Message from server ', event.data)
+      let data = JSON.parse(event.data)
+      execute(data.a)
     })
-    
+  }
+
+  useEffect(() => {
+    init()     
+    connectToCPU()
   });
 
   let camera, scene, renderer;
