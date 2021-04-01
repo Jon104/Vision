@@ -21,7 +21,7 @@ const Views = (props) => {
       height: 200,
     },
     {
-      id: "canvas3vie",
+      id: "canvas3",
       type: "sectorial",
       rulers: { vertical: "ultrasound", horizontal: "amp" },
       width: 800,
