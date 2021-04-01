@@ -1,5 +1,5 @@
 // import LZ4 from "lz4js";
-import gls from "../services/Webgl";
+import gls from "./webgl";
 
 const websocket = new WebSocket("ws://localhost:8003");;
 

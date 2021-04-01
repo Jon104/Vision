@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { initializeCanvas } from "../services/Webgl";
+import { initializeCanvas } from "../services/webgl";
 
 const View = (props) => {
   const { id, width, height, type, subtype } = props;
