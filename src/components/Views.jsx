@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Draggable from "react-draggable";
 import { getColor } from "../services/utils";
 import View from "./View";
+import socket from "../services/socket"
 
 const Views = (props) => {
   const [views, setViews] = useState([
@@ -28,6 +29,8 @@ const Views = (props) => {
       height: 200,
     }
   ])
+
+  useEffect(() => socket.connectToCPU(views))
 
   return (
     <>

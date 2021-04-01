@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { initializeCanvas } from "../services/webgl";
+import { initializeCanvas } from "../services/Webgl";
 
 const View = (props) => {
   const { id, width, height, type, subtype } = props;
-  useEffect(() => initializeCanvas(id, type, subtype));
+  useEffect(() => initializeCanvas({ id, type, subtype }));
 
   const amplitudeRulerBreakpoints = [
     -100,

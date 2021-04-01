@@ -4,35 +4,21 @@ import { connect } from "react-redux";
 import Views from "./components/Views";
 import FPSStats from "react-fps-stats";
 import { startAcquisition, stopAcquisition } from "./actions";
-import { execute } from "./services/webgl";
 import ParticleField from "react-particles-webgl";
 import * as THREE from "three";
+import socket from './services/socket'
 
 var timer;
-var websocket;
 
 const App = (props) => {
   const [isParticlesEnabled, setIsParticlesEnabled] = useState(false);
 
-  const onStartAcquisition = () => websocket.send(JSON.stringify({ method: "START_ACQUISITION" }));
+  const onStartAcquisition = () => socket.send(JSON.stringify({ method: "START_ACQUISITION" }));
   const onStopAcquisition = () => clearInterval(timer);
   const onParticlesClick = () => setIsParticlesEnabled(!isParticlesEnabled);
 
-  const connectToCPU = () => {
-    websocket = new WebSocket('ws://localhost:8003')
-    websocket.binaryType = "arraybuffer";
-    websocket.addEventListener('open', function(event) {
-      console.log('openned')
-    })
-    websocket.addEventListener('message', function(event) {
-      let data = JSON.parse(event.data)
-      execute(data.a)
-    })
-  }
-
   useEffect(() => {
-    init()     
-    connectToCPU()
+    init()
   });
 
   let camera, scene, renderer;

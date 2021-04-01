@@ -1,4 +1,4 @@
-import { createProgram, createShader } from "../services/webgl";
+import { createProgram, createShader } from "../services/Webgl";
 
 export const createGL = (id) => (dispatch) => {
   try {
