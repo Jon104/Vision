@@ -1,7 +1,7 @@
 // import LZ4 from "lz4js";
 import gls from "./webgl";
 
-const websocket = new WebSocket("ws://localhost:8003");;
+const websocket = new WebSocket("ws://localhost:8001");;
 
 const bindDataToViews = (event) => {
   let data = JSON.parse(event.data)
